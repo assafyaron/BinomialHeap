@@ -214,10 +214,13 @@ public class BinomialHeap
 		HeapNode currNode = item.node;
 		HeapNode currParent = currNode.getParent();
 		while(currParent != null && currNode.getKey() < currParent.getKey()) {
-			currNode.item = currParent.item;
-			currParent.item = item;
+			currNode.setItem(currParent.getItem());
+			currParent.getItem().setNode(currNode);
+			currParent.setItem(item);
+			item.setNode(currParent);
 			currNode = currParent;
 			currParent = currNode.getParent();
+			
 		}
 		updateMin();
 		updateLast();
@@ -252,6 +255,7 @@ public class BinomialHeap
 		// 3. if heap2.size() >= 2 - use a chain of single melds to add each rank's root in heap2 to our heap
 
 		// RUNTIME: O(log(n))
+		
 
 		// heap2 is empty
 		if (heap2.empty()) {
