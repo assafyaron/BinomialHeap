@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+
+
 /**
  * BinomialHeap
  *
@@ -93,9 +95,14 @@ public class BinomialHeap
 		HeapNode currChild = this.min.getChild();
 		for(int i=0; i<minIdx;i++) {
 			newHeapSubTreeArray.add(0, currChild);
+			currChild.setParent(null);
+			
 
 			// move up the chain of brothers of the root
-			currChild = currChild.getNext();
+			HeapNode tempNode = currChild.getNext();
+			currChild.setNext(null);
+			currChild = tempNode;
+			
 		}
 
 		// create a new binomial heap using the newHeapSubTreeArray
@@ -120,9 +127,9 @@ public class BinomialHeap
 		this.updateMin();
 		this.updateLast();
 		
-
-		// meld the new heap with the original one
 		this.meld(newHeap);
+		// meld the new heap with the original one
+		
 	}
 
 	/**
@@ -386,19 +393,23 @@ public class BinomialHeap
 		// Update pointers of both nodes
 		if(minNode.getChild() != null) 
 		{
-			// If the minNode has two or more children, then the child pointer has a next object.
-			//In this case, we would like to connect the otherNode to the minNode's child's next object.
+			// if the minNode has more than one child, we will set the otherNode as the next object of the minNode's last child
+			//otherNode will point to the first child of the minNode.
 			if (minNode.getChild().getNext() != null)
 			{
-				otherNode.setNext(minNode.getChild().getNext());
+				HeapNode temp = minNode.getChild().getNext();
+				while(temp.getNext() != minNode.getChild())
+				{
+					temp = temp.getNext();
+				}
+				temp.setNext(otherNode);
 			}
 			// else, the minNode has one child, and we will set this child as the next object of the otherNode.
 			else
 			{
-				otherNode.setNext(minNode.getChild());
+				minNode.getChild().setNext(otherNode);
 			}
-			// In both cases, the otherNode will be the next of the minNode's child.
-			minNode.getChild().setNext(otherNode);
+			otherNode.setNext(minNode.getChild());
 		}
 		otherNode.setParent(minNode);
 		minNode.setChild(otherNode);
@@ -569,150 +580,4 @@ public class BinomialHeap
 			return this.node;
 		}
 	}
-
-
-	/*******************************************/
-	/************* MAIN FUNCTION **************/
-	/*****************************************/
-
-public static void main(String[] args) {
-
-	// Create Heap
-	BinomialHeap myHeap = new BinomialHeap();
-
-
-	// Insert Nodes
-	myHeap.insert(1,"1");
-	myHeap.insert(2,"2");
-	myHeap.insert(3,"3");
-	myHeap.insert(1,"1.1");
-	myHeap.insert(4,"4");
-	myHeap.insert(5,"5");
-	myHeap.insert(7,"7");
-	HeapItem myitem = myHeap.insert(0,"0");
-	myHeap.insert(-1,"-1");
-	myHeap.insert(20,"20");
-	myHeap.insert(8,"8");
-	myHeap.insert(-10,"-10");
-	myHeap.insert(-9,"-9");
-	myHeap.insert(33,"33");
-	myHeap.insert(-45,"-45");
-
-
-	myHeap.decreaseKey(myitem,1);
-	// Delete min
-
-	HeapNode currRoot = null;
-	// B0
-	System.out.println("ROOT OF B0:");
-	if (myHeap.subTreesArray.get(0) == null) {
-		System.out.println("null");
-	}
-	else {
-		currRoot = myHeap.subTreesArray.get(0);
-		System.out.println(currRoot.getKey());
-	}
-	System.out.println("NODES OF B0:");
-	while ((currRoot != null) && (currRoot.getChild() != null)) {
-		System.out.println(currRoot.getChild().getKey());
-		currRoot = currRoot.getChild();
-	}
-	System.out.println();
-
-	// B1
-	System.out.println("ROOT OF B1:");
-	if (myHeap.subTreesArray.get(1) == null) {
-		System.out.println("null");
-	}
-	else {
-		currRoot = myHeap.subTreesArray.get(1);
-		System.out.println(currRoot.getKey());
-	}
-	System.out.println("NODES OF B1:");
-	while ((currRoot != null) && (currRoot.getChild() != null)) {
-		System.out.println(currRoot.getChild().getKey());
-		currRoot = currRoot.getChild();
-	}
-	System.out.println();
-
-	// B2
-	System.out.println("ROOT OF B2:");
-	if (myHeap.subTreesArray.get(2) == null) {
-		System.out.println("null");
-	}
-	else {
-		currRoot = myHeap.subTreesArray.get(2);
-		System.out.println(currRoot.getKey());
-	}
-	System.out.println("NODES OF B2:");
-	while ((currRoot != null) && (currRoot.getChild() != null)) {
-		System.out.println(currRoot.getChild().getKey());
-		currRoot = currRoot.getChild();
-	}
-	System.out.println();
-
-	// B3
-	System.out.println("ROOT OF B3:");
-	if (myHeap.subTreesArray.get(3) == null) {
-		System.out.println("null");
-	}
-	else {
-		currRoot = myHeap.subTreesArray.get(3);
-		System.out.println(currRoot.getKey());
-	}
-	System.out.println("NODES OF B3:");
-	while ((currRoot != null) && (currRoot.getChild() != null)) {
-		System.out.println(currRoot.getChild().getKey());
-		currRoot = currRoot.getChild();
-	}
-	System.out.println();
-
-	// B4
-	// System.out.println("ROOT OF B4:");
-	// if (myHeap.subTreesArray.get(4) == null) {
-	// 	System.out.println("null");
-	// }
-	// else {
-	// 	currRoot = myHeap.subTreesArray.get(4);
-	// 	System.out.println(currRoot.getKey());
-	// }
-	// System.out.println("NODES OF B4:");
-	// while ((currRoot != null) && (currRoot.getChild() != null)) {
-	// 	System.out.println(currRoot.getChild().getKey());
-	// 	currRoot = currRoot.getChild();
-	// }
-
-	System.out.println();
-	System.out.println("SPECIAL's:");
-	System.out.println();
-	System.out.println("MINIMUM:");
-	System.out.println(myHeap.min.getKey());
-	System.out.println("LAST ROOT:");
-	System.out.println(myHeap.getLast().getKey());
-	System.out.println("NUM OF TREES:");
-	System.out.println(myHeap.subTreesArray.size());
-	System.out.println("NUM OF FULL TREES:");
-	System.out.println(myHeap.numTrees());
-	System.out.println("treescount value:");
-	System.out.println(myHeap.trees_count);
-	System.out.println("NUM OF NODES:");
-	System.out.println(myHeap.size());
-
-	// // Pointer Check
-	// System.out.println("POINTER CHECK");
-	// System.out.println("I AM NODE: ");
-	// System.out.println(myHeap.subTreesArray.get(1).getKey());
-	// System.out.println("MY CHILD IS: ");
-	// System.out.println(myHeap.subTreesArray.get(1).getChild().getKey());
-	// System.out.println("I AM THE KID MY FATHER IS: ");
-	// System.out.println(myHeap.subTreesArray.get(1).getChild().getParent().getKey());
-	// System.out.println("I AM NODE: ");
-	// System.out.println(myHeap.subTreesArray.get(3).getChild().getKey());
-	// System.out.println("MY NEXT IS: ");
-	// System.out.println(myHeap.subTreesArray.get(3).getChild().getNext().getKey());
-
-
-
-	}
-
 }
